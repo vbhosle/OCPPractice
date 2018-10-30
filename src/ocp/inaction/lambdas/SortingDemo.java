@@ -14,7 +14,7 @@ public class SortingDemo {
 	public static void main(String[] args) {
 //		filterWithPredicates();
 //		sortWithComparing();
-		customForEach();
+		testCustomFilter();
 	}
 
 	public static void populateApples(List<Apple> list) {
@@ -74,7 +74,13 @@ public class SortingDemo {
 	}
 	
 	
-	public static void customForEach() {
+	public static <T> void foreach(List<T> list, Consumer<T> c) {
+		for(T item:list) {
+			c.accept(item);
+		}
+	}
+	
+	public static void testCustomForEach() {
 		List<Apple> list = new ArrayList<>();
 		populateApples(list);
 		
@@ -83,9 +89,22 @@ public class SortingDemo {
 		foreach(list, a -> System.out.println(a.getWeight()>150?"heavy":"light"));
 	}
 	
-	public static <T> void foreach(List<T> list, Consumer<T> c) {
+	public static <T> List<T> filter(List<T> list, Predicate<T> criteria){
+		List<T> filteredList = new ArrayList<>();
+		
 		for(T item:list) {
-			c.accept(item);
+			if(criteria.test(item)) {
+				filteredList.add(item);
+			}
 		}
+		
+		return filteredList;
+	}
+	
+	public static void testCustomFilter() {
+		List<Apple> list = new ArrayList<>();
+		populateApples(list);
+		
+		foreach(filter(list, a -> "red".equals(a.getColor())), System.out::println);
 	}
 }
