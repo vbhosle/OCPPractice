@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,8 @@ public class SortingDemo {
 	public static void main(String[] args) {
 //		filterWithPredicates();
 //		sortWithComparing();
-		testCustomFilter();
+//		testCustomFilter();
+		testCustomMap();
 	}
 
 	public static void populateApples(List<Apple> list) {
@@ -107,4 +109,22 @@ public class SortingDemo {
 		
 		foreach(filter(list, a -> "red".equals(a.getColor())), System.out::println);
 	}
+	
+	public static <T,R> List<R> map(List<T> list, Function<T, R> mapper) {
+		List<R> mappedList = new ArrayList<>();
+		
+		for(T item: list) {
+			mappedList.add(mapper.apply(item));
+		}
+		
+		return mappedList;
+	}
+	
+	
+	public static void testCustomMap() {
+		List<Apple> list = new ArrayList<>();
+		populateApples(list);
+		
+		foreach(map(list, Apple::getColor), System.out::println);
+	} 
 }
