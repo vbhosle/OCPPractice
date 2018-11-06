@@ -1,22 +1,29 @@
-package ocp.inaction.lambdas;
+package ocp.inaction;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
 import java.util.function.Function;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntFunction;
+import java.util.function.IntPredicate;
+import java.util.function.LongPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import ocp.inaction.Apple;
+import ocp.inaction.model.Apple;
 
-public class SortingDemo {
+public class FilterSortDemo {
 
 	public static void main(String[] args) {
 //		filterWithPredicates();
 //		sortWithComparing();
-//		testCustomFilter();
-		testCustomMap();
+//		testPrimitivePredicates();
+//		printLogBase10(1000);
+		System.out.println("Minimum of 50 & 10 is "+ minInt(50, 10));
 	}
 
 	public static void populateApples(List<Apple> list) {
@@ -75,56 +82,35 @@ public class SortingDemo {
 		System.out.println("Sorted by color :" + sortedByColor);
 	}
 	
-	
-	public static <T> void foreach(List<T> list, Consumer<T> c) {
-		for(T item:list) {
-			c.accept(item);
-		}
+	public static void testPrimitivePredicates() {
+		int x = 10;
+		System.out.println(x + " is even? :" + isEvenInteger(x));
+		
+		long l = 2147483648L;
+		System.out.println(l + " is even? :" + isEvenLong(l));
 	}
 	
-	public static void testCustomForEach() {
-		List<Apple> list = new ArrayList<>();
-		populateApples(list);
-		
-		foreach(list, System.out::println);
-		foreach(list, a -> System.out.println(a.getColor()));
-		foreach(list, a -> System.out.println(a.getWeight()>150?"heavy":"light"));
+	public static boolean isEvenInteger(int nbr) {
+		IntPredicate isEven = x -> x%2 == 0;
+		return isEven.test(nbr);
 	}
 	
-	public static <T> List<T> filter(List<T> list, Predicate<T> criteria){
-		List<T> filteredList = new ArrayList<>();
-		
-		for(T item:list) {
-			if(criteria.test(item)) {
-				filteredList.add(item);
-			}
-		}
-		
-		return filteredList;
+	public static boolean isEvenLong(long nbr) {
+		LongPredicate isEven = x -> x%2 == 0;
+		return isEven.test(nbr);
 	}
 	
-	public static void testCustomFilter() {
-		List<Apple> list = new ArrayList<>();
-		populateApples(list);
-		
-		foreach(filter(list, a -> "red".equals(a.getColor())), System.out::println);
+	public static void printLogBase10(double number) {
+		DoubleConsumer log10 = x -> System.out.println("log10 of "+ number + " is " + Math.log10(x));
+		log10.accept(number);
 	}
 	
-	public static <T,R> List<R> map(List<T> list, Function<T, R> mapper) {
-		List<R> mappedList = new ArrayList<>();
-		
-		for(T item: list) {
-			mappedList.add(mapper.apply(item));
-		}
-		
-		return mappedList;
+	public static int minInt(int a, int b) {
+		IntBinaryOperator min = Math::min;
+		return min.applyAsInt(a, b);
 	}
 	
-	
-	public static void testCustomMap() {
-		List<Apple> list = new ArrayList<>();
-		populateApples(list);
-		
-		foreach(map(list, Apple::getColor), System.out::println);
-	} 
+//	public static int tripleTheInt(int a) {
+////		IntFunction tripler = 
+//	}
 }

@@ -1,10 +1,21 @@
-package ocp.inaction;
+package ocp.inaction.model;
+
+import java.util.Random;
 
 public class Apple {
 
-	private String color;
+	private String color = "red";
 	private int weight;
 	
+	public Apple() {
+		Random random = new Random();
+		this.weight = 100 + random.nextInt(100);
+	}
+	
+	public Apple(int weight) {
+		this.weight = weight;
+	}
+
 	public Apple(String color, int weight) {
 		this.color = color;
 		this.weight = weight;
