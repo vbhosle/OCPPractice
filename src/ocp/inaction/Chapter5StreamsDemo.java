@@ -5,6 +5,7 @@ import ocp.inaction.model.Transaction;
 
 import java.util.*;
 import java.util.function.IntPredicate;
+import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -13,9 +14,33 @@ import java.util.stream.Stream;
 public class Chapter5StreamsDemo {
 
 	public static void main(String[] args) {
-		testPythagorianTripples();
+		fibonacciSeriesWithIterate(10);
 	}
 
+	public static void fibonacciSeriesWithIterate(int limit) {
+		Stream.iterate(new int[] {0, 1}, t -> new int[] {t[1], t[0]+t[1]})
+			  .limit(limit)
+			  .map(t -> t[0])
+			  .forEach(System.out::println);
+	}
+	
+	public static void fibonacciSeriesWithGenerate(int limit) {
+		IntStream.generate(new IntSupplier() {
+			private int previous = 0;
+			private int current = 1;
+			@Override
+			public int getAsInt() {
+				int oldPrevious = this.previous;
+				int nextValue = this.previous + this.current; 
+				this.previous = this.current;
+				this.current = nextValue;
+				return oldPrevious;
+			}
+		})
+		.limit(limit)
+		.forEach(System.out::println);
+	}
+	
 	public static void testSumOfRange() {
 		int start = 1;
 		int end = 10;
