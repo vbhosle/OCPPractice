@@ -4,11 +4,50 @@ import ocp.inaction.model.Trader;
 import ocp.inaction.model.Transaction;
 
 import java.util.*;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Chapter5StreamsDemo {
 
 	public static void main(String[] args) {
+		testPythagorianTripples();
+	}
+
+	public static void testSumOfRange() {
+		int start = 1;
+		int end = 10;
+		IntPredicate evenNumbers = i -> i%2 == 0;
+		System.out.println("Sum of even numbers from " + start + " - " + end + " = " + sumOfRange(start, end, evenNumbers));
+	}
+	
+	public static void testPythagorianTripples() {
+		int start = 1;
+		int end = 100;
+		printPythagorianTripples(start,end);
+	}
+	
+	public static int sumOfRange(int start, int end, IntPredicate filterCondition) {
+//		return IntStream.rangeClosed(start, end).filter(filterCondition).sum();
+//		return IntStream.rangeClosed(start, end).filter(filterCondition).reduce(0, Math::addExact);
+		return IntStream.rangeClosed(start, end).filter(filterCondition).reduce(0, (a, b) -> a + b);
+	}
+	
+	public static void printPythagorianTripples(int start , int end) {
+		Stream<int[]> pythagorianTripples = IntStream.rangeClosed(start, end)
+				 .boxed()
+				 .flatMap(
+					a -> IntStream.rangeClosed(a, end)
+						          .filter(b -> Math.sqrt(a*a + b*b) %1 == 0)
+						          .mapToObj(b -> new int[] {a, b, (int) Math.sqrt(a*a + b*b)})
+				);
+		pythagorianTripples.forEach(t -> System.out.println(t[0] + ", " + t[1] + ", " + t[2] + ", "));
+					
+	}
+
+	public static void transactionSolutions() {
 		List<Trader> traders = getTraders();
 		List<Transaction> transactions = getTransactions(traders);
 		
