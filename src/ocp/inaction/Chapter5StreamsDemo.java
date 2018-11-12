@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class Chapter5StreamsDemo {
 
 	public static void main(String[] args) {
-		fibonacciSeriesWithIterate(10);
+		transactionSolutions();
 	}
 
 	public static void fibonacciSeriesWithIterate(int limit) {
@@ -84,7 +84,8 @@ public class Chapter5StreamsDemo {
 		List<Transaction> solution1 = transactions.stream()
 												  .filter(t -> t.getYear() == 2011)
 												  .sorted(Comparator.comparingInt(Transaction::getValue))
-												  .collect(Collectors.toList());
+												  .collect(ArrayList::new, List::add, List::addAll);
+												  //.collect(Collectors.toList());
 		
 		System.out.println("#1 find all transactions in the year 2011 and sort them by value (small to high)");
 		solution1.forEach(System.out::println);

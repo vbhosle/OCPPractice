@@ -16,6 +16,7 @@ public class Partitioning {
 
     private static Map<Boolean, List<Dish>> partitionByVegeterian() {
         return menu.stream().collect(partitioningBy(Dish::isVegetarian));
+//        return menu.stream().collect(partitioningBy(Dish::isVegetarian, new ToListCollector<Dish>()));
     }
 
     private static Map<Boolean, Map<Dish.Type, List<Dish>>> vegetarianDishesByType() {
