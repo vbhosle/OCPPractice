@@ -7,7 +7,7 @@ public class FileTest01{
    //by default and empty array is passed to args
    //System.out.println("Input args:" + Arrays.toString(args));
 
-   String fileName = "test01.txt";
+   String fileName = "test02.txt";
    /*
    checkFileExistance(fileName);
    createNewFile(fileName);
@@ -15,7 +15,7 @@ public class FileTest01{
    deleteFile(fileName);
    */
    //deleteFile(fileName); // calling delete twice doesn't throw any exception
-   rwCharsWithReaderWriter(fileName);
+   rwBytesWithIOStreams(fileName);
  }
 
  public static void checkFileExistance(String fileName){
@@ -57,27 +57,51 @@ public class FileTest01{
    File file = new File(fileName);
    char in[] = new char[50];
    try{
-     FileWriter fwriter = new FileWriter(file); // creates file if not there 
-     fwriter.write("Hello!" + System.lineSeparator() + "Good Morning!");
-     fwriter.flush();
-     fwriter.close();
-     FileReader reader = new FileReader(file); // doesn't create a new file, throws FileNotFoundException if file doesn't exist
-     int size = reader.read(in);
-     System.out.println("Size =" + size);
-     for(char c: in){
-       System.out.print(c);
-     }
+     	FileWriter fwriter = new FileWriter(file); // creates file if not there 
+     	fwriter.write("Hello!" + System.lineSeparator() + "Good Morning!");
+     	fwriter.flush();
+     	fwriter.close();
+     	FileReader reader = new FileReader(file); // doesn't create a new file, throws FileNotFoundException if file doesn't exist
+     	int size = reader.read(in);
+     	System.out.println("Size =" + size);
+     	for(char c: in){
+       		System.out.print(c);
+     	}
 
-    reader.close();
+    	reader.close();
    }
    catch(IOException ex){
-	System.out.println("Exception while writing to the file " + fileName);
+	System.out.println("Exception while writing/reading to the file " + fileName);
           
    }
  }
 
- public static void rwBytesWithIOStreams(){
+ public static void rwBytesWithIOStreams(String fileName){
+    String content = "Hello!" + System.lineSeparator() + "Good Afternoon!";
+    File file = new File(fileName);
+    byte in[] = new byte[256];
+    FileOutputStream fos = null;
+    FileInputStream fis = null;
 
+    try{
+    	fos = new FileOutputStream(file);
+    	fos.write(content.getBytes("UTF-8"));
+    	fos.close();
+
+	fis = new FileInputStream(file);
+        int size = fis.read(in);
+	System.out.println("Size=" + size);
+	
+	for(byte b: in){
+	  System.out.print((char)b);	
+	}
+
+	fis.close();
+    }
+    catch(IOException ex){
+	System.out.println("IOExeption occurred");
+	ex.printStackTrace();
+    }
  }
 
 }
